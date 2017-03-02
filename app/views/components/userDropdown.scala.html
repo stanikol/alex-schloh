@@ -1,0 +1,15 @@
+@(user: Option[models.user.User])<ul id="dropdown-user" class="dropdown-content">
+  @if(user.isEmpty) {
+  @if(services.settings.SettingsService.allowRegistration) { <li>
+    <a class="theme-text" href="@controllers.auth.routes.RegistrationController.registrationForm()">Sign Up</a>
+  </li> }
+  <li><a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signInForm()">Sign In</a></li>
+  } else {
+  @if(user.exists(_.role == models.user.Role.Admin)) {
+  <li><a class="theme-text" href="@controllers.admin.routes.AdminController.index()">Admin</a></li>
+  }
+  <li><a class="theme-text" href="@controllers.routes.ProfileController.view()">Profile</a></li>
+  <li><a class="theme-text" href="@controllers.auth.routes.AuthenticationController.signOut()">Sign Out</a></li>
+  }
+  <li><a class="theme-text" href="@utils.Config.projectUrl" target="_blank">About</a></li>
+</ul>

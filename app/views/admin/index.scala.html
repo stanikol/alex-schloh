@@ -1,0 +1,30 @@
+@(user: models.user.User)(implicit request: Request[AnyContent], session: Session, flash: Flash)
+@layout.admin(user, "", utils.Config.projectName + " Administration") {
+  <div class="content-panel">
+    <div class="panel-title">@utils.Config.projectName Administration</div>
+
+    Use the menu above or the links below to get started!
+
+    <ul class="collection">
+      <li class="collection-item">
+        <a class="theme-text" href="@controllers.admin.routes.GraphQLController.graphql(None)">GraphQL</a>
+        <div><em>Query the system using GraphQL.</em></div>
+      </li>
+      <li class="collection-item">
+        <a class="theme-text" href="@controllers.admin.routes.SettingsController.settings()">System Preferences</a>
+        <div><em>Edit system preferences.</em></div>
+      </li>
+      <li class="collection-item">
+        <a class="theme-text" href="@controllers.admin.routes.UserEditController.users()">User Management</a>
+        <div><em>Manage the users of the system.</em></div>
+      </li>
+      <li class="collection-item">
+        <a class="theme-text" href="@controllers.admin.routes.AdminController.status()">@utils.Config.projectName Status</a>
+        <div><em>View server details and system status.</em></div>
+      </li>
+    </ul>
+  </div>
+  <div class="panel-action">
+    <a class="theme-text" href="@controllers.routes.HomeController.home()">Back</a>
+  </div>
+}

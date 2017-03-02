@@ -1,0 +1,28 @@
+@(user: Option[models.user.User], title: String, mainDivClass: String = "static-container container", scripts: Seq[String] = Nil)(content: Html)(
+    implicit request: Request[AnyContent], session: Session, flash: Flash
+)@layout.materialize(user, title, scripts = scripts, stylesheets = Seq(controllers.routes.Assets.versioned("stylesheets/boilerplay.min.css").url)) {
+  <header>
+    @views.html.layout.themeStyles(user.map(_.preferences.theme).getOrElse(models.template.Theme.BlueGrey))
+
+    @views.html.components.userDropdown(user)
+
+    <nav id="topnav" class="theme">
+      <a href="@controllers.routes.HomeController.home()" class="brand-logo center">@utils.Config.projectName</a>
+      <ul class="right hide-on-small-only">
+        <li><a class="dropdown-button" href="@routes.ProfileController.view()" data-activates="dropdown-user">
+          @user.map(_.username).getOrElse("Guest") <i id="user-dropdown-toggle" class="fa @models.template.Icons.dropdownToggle right"></i>
+        </a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="@mainDivClass">
+      @flash.get("error").map { err => <div class="flash-error z-depth-1">@Html(err)</div> }
+      @flash.get("success").map { success => <div class="flash-success z-depth-1">@Html(success)</div> }
+      @content
+    </div>
+  </main>
+
+  @views.html.layout.footer()
+}

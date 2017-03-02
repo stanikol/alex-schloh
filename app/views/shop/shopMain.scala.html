@@ -1,0 +1,39 @@
+@(user: Option[models.user.User], title: String, shopCart: Seq[OrderedInfo], scripts: Seq[String] = Nil)(content: Html)(implicit request: Request[AnyContent], session: Session, flash: Flash, messages: Messages)
+@shopTotal = @{(shopCart.map(_.total).headOption.getOrElse(0), shopCart.map(_.qnt).foldLeft(0)(_ + _))}
+@layout.materialize(user = user, title = title, scripts = scripts) {
+<header>
+
+    <nav id="topnav" class="theme">
+        <a href="@controllers.shop.routes.Shop.index()" class="brand-logo center">@utils.Config.projectName</a>
+        <a class="right" href="@controllers.shop.routes.Shop.showShopCart"><i class="fa fa-shopping-cart fa-4x" aria-hidden="true"></i>@shopTotal._2 items<br>$@shopTotal._1</a>
+        <ul class="right hide-on-med-and-down">
+            <li></li>
+        </ul>
+        <ul class="right hide-on-small-only">
+            <li><a class="dropdown-button" href="@routes.ProfileController.view()" data-activates="dropdown-user">
+                @if(user.isDefined){
+                    user.get.username <i id="user-dropdown-toggle" class="fa @models.template.Icons.dropdownToggle right"></i>
+                }
+            </a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="static-container container">
+        @flash.get("error").map { err =>
+        <div class="flash-error z-depth-1">@err</div>
+        }
+        @flash.get("success").map { success =>
+        <div class="flash-success z-depth-1">@success</div>
+        }
+        <div class="row">
+            <div class="col s12">
+                @content
+            </div>
+        </div>
+    </div>
+</main>
+
+@views.html.layout.footer()
+}

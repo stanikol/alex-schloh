@@ -1,0 +1,5 @@
+GET   /             controllers.shop.Shop.index
+GET   /cart         controllers.shop.Shop.showShopCart
+POST  /buy          controllers.shop.Shop.buy
+# POST  /add/:goodsItemID     controllers.shop.Shop.addToShoppingCart(goodsItemID: Long)
+
