@@ -13,3 +13,5 @@ lazy val benchmarking = Utilities.benchmarking
 resolvers ++= Seq(
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
+
+enablePlugins(JavaAppPackaging)

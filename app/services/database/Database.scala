@@ -22,7 +22,15 @@ object Database extends Instrumented {
 
   def open(cfg: play.api.Configuration): Unit = {
     def get(k: String) = cfg.getString("database." + k).getOrElse(throw new IllegalStateException(s"Missing config for [$k]."))
-    open(get("username"), get("host"), get("port").toInt, Some(get("password")), Some(get("database")))
+    val url = cfg.getString("database.url").getOrElse("")
+    println("PostgreSQL URL is " + url)
+    val pattern = """postgres://(\w+):(\w+)@(.*):(\d+)/(.*)""".r
+    url match {
+      case pattern(username, password, host, port, database) =>
+        open(username, host, port.toInt, Some(password), Some(database))
+      case _ =>
+        open(get("username"), get("host"), get("port").toInt, Some(get("password")), Some(get("database")))
+    }
   }
 
   def open(username: String, host: String = "localhost", port: Int = 5432, password: Option[String] = None, database: Option[String] = None): Unit = {
